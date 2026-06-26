@@ -57,7 +57,7 @@ function ProfilePage() {
 
   const handleLogout = () => {
     logout();
-    navigate({ to: "/" });
+    navigate({ to: "/clubs" });
   };
 
   return (
@@ -218,9 +218,24 @@ function ProfilePage() {
             <h3 className="mb-4 text-base font-bold text-foreground">Hoạt động gần đây</h3>
             <ul className="space-y-3">
               {[
-                { icon: Trophy, color: "text-success", text: "Đạt Top MVP kỳ này", time: "2 ngày trước" },
-                { icon: CheckCircle2, color: "text-primary", text: "Hoàn thành tác vụ \"Lên kịch bản Year End Party\"", time: "4 ngày trước" },
-                { icon: CalendarDays, color: "text-orange", text: "Tham gia sự kiện Workshop Kỹ năng", time: "1 tuần trước" },
+                {
+                  icon: Trophy,
+                  color: "text-success",
+                  text: "Đạt Top MVP kỳ này",
+                  time: "2 ngày trước",
+                },
+                {
+                  icon: CheckCircle2,
+                  color: "text-primary",
+                  text: 'Hoàn thành tác vụ "Lên kịch bản Year End Party"',
+                  time: "4 ngày trước",
+                },
+                {
+                  icon: CalendarDays,
+                  color: "text-orange",
+                  text: "Tham gia sự kiện Workshop Kỹ năng",
+                  time: "1 tuần trước",
+                },
               ].map((a, i) => (
                 <li key={i} className="flex items-center gap-3 rounded-lg bg-secondary px-3 py-2.5">
                   <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-card">
@@ -268,7 +283,9 @@ function Field({
           className="h-10 w-full rounded-lg border border-border bg-card px-3 text-sm text-foreground outline-none transition-colors focus:border-ring"
         />
       ) : (
-        <p className="rounded-lg bg-secondary px-3 py-2.5 text-sm font-medium text-foreground">{value}</p>
+        <p className="rounded-lg bg-secondary px-3 py-2.5 text-sm font-medium text-foreground">
+          {value}
+        </p>
       )}
     </div>
   );

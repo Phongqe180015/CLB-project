@@ -130,7 +130,7 @@ function RootShell({ children }: { children: ReactNode }) {
 function GuestRedirect() {
   const navigate = useNavigate();
   useEffect(() => {
-    navigate({ to: "/" });
+    navigate({ to: "/clubs" });
   }, [navigate]);
   return null;
 }
@@ -150,20 +150,21 @@ function RootComponent() {
   const user = useAuth();
   const isAuthRoute = pathname === "/login" || pathname === "/register";
   const isClubsArea = pathname === "/clubs" || pathname.startsWith("/clubs/");
-  const isPublicDashboard = pathname === "/";
+  const isPublicDashboard = pathname === "/clubs";
 
   let content: ReactNode;
   if (isAuthRoute) {
     content = <Outlet />;
   } else if (!user) {
     // Guests can browse the public dashboard and clubs area; everything else returns home.
-    content = isPublicDashboard || isClubsArea ? (
-      <PublicShell>
-        <Outlet />
-      </PublicShell>
-    ) : (
-      <GuestRedirect />
-    );
+    content =
+      isPublicDashboard || isClubsArea ? (
+        <PublicShell>
+          <Outlet />
+        </PublicShell>
+      ) : (
+        <GuestRedirect />
+      );
   } else {
     content = (
       <AppShell>
@@ -175,4 +176,3 @@ function RootComponent() {
 
   return <QueryClientProvider client={queryClient}>{content}</QueryClientProvider>;
 }
-
