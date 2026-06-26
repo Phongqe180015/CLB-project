@@ -1,6 +1,14 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { Search, GraduationCap, Users2, Megaphone, Sparkles, ArrowRight, Check } from "lucide-react";
+import {
+  Search,
+  GraduationCap,
+  Users2,
+  Megaphone,
+  Sparkles,
+  ArrowRight,
+  Check,
+} from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -75,6 +83,12 @@ function ClubsPage() {
         <span className="rounded-full bg-secondary px-3 py-1.5 text-sm font-semibold text-muted-foreground">
           Student Portal
         </span>
+        <Link
+          to="/login"
+          className="inline-flex h-10 items-center gap-2 rounded-lg bg-primary px-4 text-sm font-semibold text-primary-foreground shadow-sm transition-colors hover:bg-primary/90"
+        >
+          Đăng nhập
+        </Link>
       </header>
 
       <div className="mx-auto max-w-[1400px] px-4 py-8 sm:px-6 lg:px-8">
@@ -84,7 +98,8 @@ function ClubsPage() {
             Khám Phá Các Câu Lạc Bộ
           </h1>
           <p className="mx-auto mt-2 max-w-xl text-sm text-muted-foreground">
-            Tìm câu lạc bộ phù hợp với đam mê của bạn và gửi đơn đăng ký gia nhập chỉ trong vài bước.
+            Tìm câu lạc bộ phù hợp với đam mê của bạn và gửi đơn đăng ký gia nhập chỉ trong vài
+            bước.
           </p>
         </div>
 
@@ -246,9 +261,7 @@ function ClubsPage() {
                   </span>
                   <div className="min-w-0 text-left">
                     <DialogTitle className="text-xl">{detailClub.fullName}</DialogTitle>
-                    <DialogDescription className="mt-0.5">
-                      {detailClub.category}
-                    </DialogDescription>
+                    <DialogDescription className="mt-0.5">{detailClub.category}</DialogDescription>
                   </div>
                 </div>
               </DialogHeader>
@@ -258,7 +271,11 @@ function ClubsPage() {
 
                 <div className="grid grid-cols-2 gap-3">
                   <InfoRow icon={Sparkles} label="Người tạo" value={detailClub.createdBy} />
-                  <InfoRow icon={GraduationCap} label="Ban chủ nhiệm" value={detailClub.president} />
+                  <InfoRow
+                    icon={GraduationCap}
+                    label="Ban chủ nhiệm"
+                    value={detailClub.president}
+                  />
                   <InfoRow
                     icon={Users2}
                     label="Số thành viên"

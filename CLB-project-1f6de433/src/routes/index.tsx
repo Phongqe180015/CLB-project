@@ -37,10 +37,42 @@ export const Route = createFileRoute("/")({
 });
 
 const stats = [
-  { label: "Tác vụ đang chạy", value: "24", delta: "+12%", icon: Clock, tone: "bg-sky-100 text-sky-600", to: "/tasks", search: { status: "progress" } },
-  { label: "Hoàn thành tuần này", value: "18", delta: "+8%", icon: CheckCircle2, tone: "bg-emerald-100 text-emerald-600", to: "/tasks", search: { status: "done" } },
-  { label: "Thành viên hoạt động", value: "86", delta: "+5", icon: Users, tone: "bg-indigo-100 text-indigo-600", to: "/members", search: undefined },
-  { label: "Sự kiện sắp tới", value: "4", delta: "tháng 6", icon: PartyPopper, tone: "bg-orange-100 text-orange-600", to: "/events", search: undefined },
+  {
+    label: "Tác vụ đang chạy",
+    value: "24",
+    delta: "+12%",
+    icon: Clock,
+    tone: "bg-sky-100 text-sky-600",
+    to: "/tasks",
+    search: { status: "progress" },
+  },
+  {
+    label: "Hoàn thành tuần này",
+    value: "18",
+    delta: "+8%",
+    icon: CheckCircle2,
+    tone: "bg-emerald-100 text-emerald-600",
+    to: "/tasks",
+    search: { status: "done" },
+  },
+  {
+    label: "Thành viên hoạt động",
+    value: "86",
+    delta: "+5",
+    icon: Users,
+    tone: "bg-indigo-100 text-indigo-600",
+    to: "/members",
+    search: undefined,
+  },
+  {
+    label: "Sự kiện sắp tới",
+    value: "4",
+    delta: "tháng 6",
+    icon: PartyPopper,
+    tone: "bg-orange-100 text-orange-600",
+    to: "/events",
+    search: undefined,
+  },
 ] as const;
 
 const activityData = [
@@ -53,7 +85,12 @@ const activityData = [
   { name: "CN", value: 14 },
 ];
 
-const pieColors = ["var(--color-muted-foreground)", "var(--color-info)", "var(--color-orange)", "var(--color-success)"];
+const pieColors = [
+  "var(--color-muted-foreground)",
+  "var(--color-info)",
+  "var(--color-orange)",
+  "var(--color-success)",
+];
 
 function Dashboard() {
   const user = useAuth();
@@ -75,21 +112,12 @@ function Dashboard() {
             : "Đăng nhập để quản lý tác vụ, lịch hoạt động và thành viên của bạn."
         }
         action={
-          user ? (
-            <Link
-              to="/tasks"
-              className="inline-flex h-10 items-center gap-2 rounded-lg bg-orange px-4 text-sm font-semibold text-orange-foreground shadow-sm transition-colors hover:bg-orange/90"
-            >
-              + Tạo tác vụ
-            </Link>
-          ) : (
-            <Link
-              to="/login"
-              className="inline-flex h-10 items-center gap-2 rounded-lg bg-primary px-4 text-sm font-semibold text-primary-foreground shadow-sm transition-colors hover:bg-primary/90"
-            >
-              Đăng nhập
-            </Link>
-          )
+          <Link
+            to="/tasks"
+            className="inline-flex h-10 items-center gap-2 rounded-lg bg-orange px-4 text-sm font-semibold text-orange-foreground shadow-sm transition-colors hover:bg-orange/90"
+          >
+            + Tạo tác vụ
+          </Link>
         }
       />
 
@@ -136,9 +164,24 @@ function Dashboard() {
                     <stop offset="100%" stopColor="var(--color-primary)" stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" vertical={false} />
-                <XAxis dataKey="name" tickLine={false} axisLine={false} fontSize={12} stroke="var(--color-muted-foreground)" />
-                <YAxis tickLine={false} axisLine={false} fontSize={12} stroke="var(--color-muted-foreground)" />
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  stroke="var(--color-border)"
+                  vertical={false}
+                />
+                <XAxis
+                  dataKey="name"
+                  tickLine={false}
+                  axisLine={false}
+                  fontSize={12}
+                  stroke="var(--color-muted-foreground)"
+                />
+                <YAxis
+                  tickLine={false}
+                  axisLine={false}
+                  fontSize={12}
+                  stroke="var(--color-muted-foreground)"
+                />
                 <Tooltip
                   contentStyle={{
                     borderRadius: 12,
@@ -146,7 +189,13 @@ function Dashboard() {
                     fontSize: 13,
                   }}
                 />
-                <Area type="monotone" dataKey="value" stroke="var(--color-primary)" strokeWidth={2.5} fill="url(#g)" />
+                <Area
+                  type="monotone"
+                  dataKey="value"
+                  stroke="var(--color-primary)"
+                  strokeWidth={2.5}
+                  fill="url(#g)"
+                />
               </AreaChart>
             </ResponsiveContainer>
           </div>
@@ -158,12 +207,24 @@ function Dashboard() {
           <div className="h-44">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
-                <Pie data={pieData} dataKey="value" innerRadius={45} outerRadius={70} paddingAngle={3}>
+                <Pie
+                  data={pieData}
+                  dataKey="value"
+                  innerRadius={45}
+                  outerRadius={70}
+                  paddingAngle={3}
+                >
                   {pieData.map((_, i) => (
                     <Cell key={i} fill={pieColors[i]} />
                   ))}
                 </Pie>
-                <Tooltip contentStyle={{ borderRadius: 12, border: "1px solid var(--color-border)", fontSize: 13 }} />
+                <Tooltip
+                  contentStyle={{
+                    borderRadius: 12,
+                    border: "1px solid var(--color-border)",
+                    fontSize: 13,
+                  }}
+                />
               </PieChart>
             </ResponsiveContainer>
           </div>
@@ -185,21 +246,32 @@ function Dashboard() {
         <Card className="lg:col-span-2">
           <div className="mb-4 flex items-center justify-between">
             <h2 className="text-lg font-bold">Sự kiện sắp tới</h2>
-            <Link to="/calendar" className="inline-flex items-center gap-1 text-sm font-semibold text-primary hover:underline">
+            <Link
+              to="/calendar"
+              className="inline-flex items-center gap-1 text-sm font-semibold text-primary hover:underline"
+            >
               Xem lịch <ArrowUpRight className="h-4 w-4" />
             </Link>
           </div>
           <div className="space-y-3">
             {upcoming.map((e) => (
-              <div key={e.id} className="flex items-center gap-4 rounded-xl border border-border p-3">
+              <div
+                key={e.id}
+                className="flex items-center gap-4 rounded-xl border border-border p-3"
+              >
                 <div className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-primary-light">
                   <span className="text-lg font-extrabold leading-none text-primary">{e.day}</span>
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className="truncate font-semibold">{e.title}</p>
-                  <p className="text-xs text-muted-foreground">{e.location} • {e.date}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {e.location} • {e.date}
+                  </p>
                   <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-muted">
-                    <div className="h-full rounded-full bg-orange" style={{ width: `${e.progress}%` }} />
+                    <div
+                      className="h-full rounded-full bg-orange"
+                      style={{ width: `${e.progress}%` }}
+                    />
                   </div>
                 </div>
                 <div className="flex -space-x-2">
@@ -213,17 +285,22 @@ function Dashboard() {
         </Card>
 
         <Card className="border-success/20 bg-success/5">
-            <div className="mb-4 flex items-center justify-between">
+          <div className="mb-4 flex items-center justify-between">
             <h2 className="text-lg font-bold text-success">Top MVP kỳ này</h2>
             <Trophy className="h-5 w-5 text-success" />
           </div>
           <div className="space-y-3">
             {topMembers.map((m, i) => (
-              <div key={m.id} className="flex items-center gap-3 rounded-xl border border-border p-3">
+              <div
+                key={m.id}
+                className="flex items-center gap-3 rounded-xl border border-border p-3"
+              >
                 <span
                   className={cn(
                     "grid h-7 w-7 shrink-0 place-items-center rounded-full text-xs font-extrabold",
-                    i === 0 ? "bg-success text-success-foreground" : "bg-muted text-muted-foreground",
+                    i === 0
+                      ? "bg-success text-success-foreground"
+                      : "bg-muted text-muted-foreground",
                   )}
                 >
                   {i + 1}
