@@ -51,7 +51,10 @@ function ApplyPage() {
       <div className="-mx-4 -my-6 flex min-h-[60vh] items-center justify-center sm:-mx-6 lg:-mx-8">
         <div className="text-center">
           <p className="text-lg font-semibold">Không tìm thấy câu lạc bộ.</p>
-          <Link to="/clubs" className="mt-3 inline-block text-sm font-semibold text-primary hover:underline">
+          <Link
+            to="/clubs"
+            className="mt-3 inline-block text-sm font-semibold text-primary hover:underline"
+          >
             ← Về danh sách câu lạc bộ
           </Link>
         </div>
@@ -121,13 +124,25 @@ function ApplyPage() {
             <ReadOnlyField label="Mã Số Sinh Viên" value={user.studentId || "—"} />
             <ReadOnlyField label="Email Sinh Viên" value={user.email} />
             <Field label="Số Điện Thoại">
-              <TextInput value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="09xx xxx xxx" />
+              <TextInput
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="09xx xxx xxx"
+              />
             </Field>
             <Field label="Khóa">
-              <TextInput value={course} onChange={(e) => setCourse(e.target.value)} placeholder="K2024" />
+              <TextInput
+                value={course}
+                onChange={(e) => setCourse(e.target.value)}
+                placeholder="K2024"
+              />
             </Field>
             <Field label="Chuyên Ngành">
-              <TextInput value={major} onChange={(e) => setMajor(e.target.value)} placeholder="CNTT" />
+              <TextInput
+                value={major}
+                onChange={(e) => setMajor(e.target.value)}
+                placeholder="CNTT"
+              />
             </Field>
           </div>
 
