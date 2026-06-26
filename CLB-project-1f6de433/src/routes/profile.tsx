@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import {
   Mail,
@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { PageHeader, Card } from "@/components/ui/page-primitives";
 import { members } from "@/lib/mock-data";
+import { logout } from "@/lib/auth-store";
 
 export const Route = createFileRoute("/profile")({
   head: () => ({
@@ -33,6 +34,7 @@ export const Route = createFileRoute("/profile")({
 const me = members[0];
 
 function ProfilePage() {
+  const navigate = useNavigate();
   const [editing, setEditing] = useState(false);
   const [form, setForm] = useState({
     name: me.name,
@@ -51,6 +53,11 @@ function ProfilePage() {
   const save = () => {
     setForm(draft);
     setEditing(false);
+  };
+
+  const handleLogout = () => {
+    logout();
+    navigate({ to: "/" });
   };
 
   return (
@@ -141,12 +148,12 @@ function ProfilePage() {
                 <CheckCircle2 className="h-4 w-4" /> Đã đóng
               </span>
             </div>
-            <Link
-              to="/"
+            <button
+              onClick={handleLogout}
               className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-lg border border-destructive/30 px-4 py-2.5 text-sm font-semibold text-destructive transition-colors hover:bg-destructive/10"
             >
               <LogOut className="h-4 w-4" /> Đăng xuất
-            </Link>
+            </button>
           </Card>
         </div>
 

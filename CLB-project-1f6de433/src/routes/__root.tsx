@@ -130,7 +130,7 @@ function RootShell({ children }: { children: ReactNode }) {
 function GuestRedirect() {
   const navigate = useNavigate();
   useEffect(() => {
-    navigate({ to: "/clubs" });
+    navigate({ to: "/" });
   }, [navigate]);
   return null;
 }
@@ -150,13 +150,14 @@ function RootComponent() {
   const user = useAuth();
   const isAuthRoute = pathname === "/login" || pathname === "/register";
   const isClubsArea = pathname === "/clubs" || pathname.startsWith("/clubs/");
+  const isPublicDashboard = pathname === "/";
 
   let content: ReactNode;
   if (isAuthRoute) {
     content = <Outlet />;
   } else if (!user) {
-    // Guests can only browse the public clubs area; everything else sends them there.
-    content = isClubsArea ? (
+    // Guests can browse the public dashboard and clubs area; everything else returns home.
+    content = isPublicDashboard || isClubsArea ? (
       <PublicShell>
         <Outlet />
       </PublicShell>

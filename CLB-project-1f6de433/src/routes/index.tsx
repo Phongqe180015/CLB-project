@@ -23,6 +23,7 @@ import {
 } from "recharts";
 import { Card, PageHeader, Avatar } from "@/components/ui/page-primitives";
 import { tasks, members, events, taskColumns } from "@/lib/mock-data";
+import { useAuth } from "@/lib/auth-store";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/")({
@@ -55,6 +56,7 @@ const activityData = [
 const pieColors = ["var(--color-muted-foreground)", "var(--color-info)", "var(--color-orange)", "var(--color-success)"];
 
 function Dashboard() {
+  const user = useAuth();
   const pieData = taskColumns.map((c) => ({
     name: c.label,
     value: tasks.filter((t) => t.status === c.status).length,
@@ -66,15 +68,28 @@ function Dashboard() {
   return (
     <div>
       <PageHeader
-        title="Chào buổi sáng, Minh Anh 👋"
-        subtitle="Đây là bức tranh tổng thể hoạt động câu lạc bộ hôm nay."
+        title={user ? `Chào buổi sáng, ${user.name} 👋` : "Chào mừng đến với ClubHub"}
+        subtitle={
+          user
+            ? "Đây là bức tranh tổng thể hoạt động câu lạc bộ hôm nay."
+            : "Đăng nhập để quản lý tác vụ, lịch hoạt động và thành viên của bạn."
+        }
         action={
-          <Link
-            to="/tasks"
-            className="inline-flex h-10 items-center gap-2 rounded-lg bg-orange px-4 text-sm font-semibold text-orange-foreground shadow-sm transition-colors hover:bg-orange/90"
-          >
-            + Tạo tác vụ
-          </Link>
+          user ? (
+            <Link
+              to="/tasks"
+              className="inline-flex h-10 items-center gap-2 rounded-lg bg-orange px-4 text-sm font-semibold text-orange-foreground shadow-sm transition-colors hover:bg-orange/90"
+            >
+              + Tạo tác vụ
+            </Link>
+          ) : (
+            <Link
+              to="/login"
+              className="inline-flex h-10 items-center gap-2 rounded-lg bg-primary px-4 text-sm font-semibold text-primary-foreground shadow-sm transition-colors hover:bg-primary/90"
+            >
+              Đăng nhập
+            </Link>
+          )
         }
       />
 
