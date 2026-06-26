@@ -30,17 +30,26 @@ function ClubsPage() {
   const user = useAuth();
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState<string>("Tất cả");
+  const [viewMode, setViewMode] = useState<"all" | "my">("all");
+  const [myMode, setMyMode] = useState<"created" | "chaired">("created");
   const [detailClub, setDetailClub] = useState<Club | null>(null);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return clubs.filter((c) => {
+    const source =
+      viewMode === "all"
+        ? clubs
+        : clubs.filter((club) =>
+            myMode === "created" ? club.createdBy === user?.name : club.president === user?.name,
+          );
+
+    return source.filter((c) => {
       const matchCat = category === "Tất cả" || c.category === category;
       const matchQuery =
         !q || c.name.toLowerCase().includes(q) || c.description.toLowerCase().includes(q);
       return matchCat && matchQuery;
     });
-  }, [query, category]);
+  }, [query, category, viewMode, myMode, user?.name]);
 
   const openRegister = (club: Club) => {
     setDetailClub(null);
@@ -92,15 +101,43 @@ function ClubsPage() {
           </div>
         </div>
 
-        {/* Category filter */}
+        {/* View and category filters */}
+        <div className="mb-4 flex flex-wrap justify-center gap-2">
+          <button
+            onClick={() => setViewMode("all")}
+            className={cn(
+              "rounded-full px-4 py-2 text-sm font-semibold transition-colors",
+              viewMode === "all"
+                ? "bg-primary text-primary-foreground shadow-sm"
+                : "bg-card text-muted-foreground hover:bg-muted",
+            )}
+          >
+            Tất cả
+          </button>
+          <button
+            onClick={() => setViewMode("my")}
+            className={cn(
+              "rounded-full px-4 py-2 text-sm font-semibold transition-colors",
+              viewMode === "my"
+                ? "bg-primary text-primary-foreground shadow-sm"
+                : "bg-card text-muted-foreground hover:bg-muted",
+            )}
+          >
+            Của tôi
+          </button>
+        </div>
+
         <div className="mb-8 flex flex-wrap justify-center gap-2">
           {["Tất cả", ...clubCategories].map((cat) => (
             <button
               key={cat}
-              onClick={() => setCategory(cat)}
+              onClick={() => {
+                setViewMode("all");
+                setCategory(cat);
+              }}
               className={cn(
                 "rounded-full px-4 py-2 text-sm font-semibold transition-colors",
-                category === cat
+                viewMode === "all" && category === cat
                   ? "bg-primary text-primary-foreground shadow-sm"
                   : "bg-card text-muted-foreground hover:bg-muted",
               )}
@@ -109,6 +146,30 @@ function ClubsPage() {
             </button>
           ))}
         </div>
+
+        {viewMode === "my" && (
+          <div className="mb-6 flex justify-center">
+            <div className="inline-flex rounded-full border border-border bg-card p-1 shadow-[var(--shadow-card)]">
+              {[
+                { id: "created", label: "CLB đã tạo" },
+                { id: "chaired", label: "CLB chủ nhiệm" },
+              ].map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => setMyMode(item.id as "created" | "chaired")}
+                  className={cn(
+                    "rounded-full px-4 py-2 text-sm font-semibold transition-colors",
+                    myMode === item.id
+                      ? "bg-primary text-primary-foreground shadow-sm"
+                      : "text-muted-foreground hover:bg-muted",
+                  )}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Cards */}
         {filtered.length === 0 ? (
@@ -136,6 +197,18 @@ function ClubsPage() {
                     <span className="text-xs font-semibold text-muted-foreground">
                       {club.category}
                     </span>
+                    <div className="mt-1 flex flex-wrap gap-1.5">
+                      {club.createdBy === user?.name && (
+                        <span className="rounded-md bg-success/10 px-2 py-0.5 text-[11px] font-semibold text-success">
+                          Đã tạo
+                        </span>
+                      )}
+                      {club.president === user?.name && (
+                        <span className="rounded-md bg-primary/10 px-2 py-0.5 text-[11px] font-semibold text-primary">
+                          Chủ nhiệm
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
                 <p className="mt-3 flex-1 text-sm text-muted-foreground">{club.description}</p>
@@ -184,6 +257,7 @@ function ClubsPage() {
                 <p className="text-muted-foreground">{detailClub.description}</p>
 
                 <div className="grid grid-cols-2 gap-3">
+                  <InfoRow icon={Sparkles} label="Người tạo" value={detailClub.createdBy} />
                   <InfoRow icon={GraduationCap} label="Ban chủ nhiệm" value={detailClub.president} />
                   <InfoRow
                     icon={Users2}

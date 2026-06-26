@@ -16,12 +16,7 @@ import {
   Calendar,
 } from "lucide-react";
 import { PageHeader, Card, Avatar } from "@/components/ui/page-primitives";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { type Applicant } from "@/lib/mock-data";
 import { useApplicants, updateApplicantStatus } from "@/lib/applicants-store";
 import { cn } from "@/lib/utils";
@@ -30,7 +25,10 @@ export const Route = createFileRoute("/recruitment")({
   head: () => ({
     meta: [
       { title: "Tuyển dụng — ClubHub" },
-      { name: "description", content: "Cổng tuyển dụng tích hợp: duyệt, từ chối và thông báo email ứng viên." },
+      {
+        name: "description",
+        content: "Cổng tuyển dụng tích hợp: duyệt, từ chối và thông báo email ứng viên.",
+      },
     ],
   }),
   component: RecruitmentPage,
@@ -69,15 +67,15 @@ function ApplicantSheet({
   onClose: () => void;
 }) {
   return (
-    <Sheet open={!!applicant} onOpenChange={(o) => !o && onClose()}>
-      <SheetContent className="w-full overflow-y-auto sm:max-w-lg xl:max-w-4xl">
+    <Dialog open={!!applicant} onOpenChange={(o) => !o && onClose()}>
+      <DialogContent className="h-[92vh] w-[96vw] max-w-7xl overflow-y-auto border-border bg-white text-slate-900 sm:rounded-2xl">
         {applicant && (
           <>
-            <SheetHeader>
-              <SheetTitle className="sr-only">Hồ sơ {applicant.name}</SheetTitle>
-            </SheetHeader>
+            <DialogHeader>
+              <DialogTitle className="sr-only">Hồ sơ {applicant.name}</DialogTitle>
+            </DialogHeader>
 
-            <div className="grid grid-cols-1 gap-6 pb-6 xl:grid-cols-[340px_minmax(0,1fr)]">
+            <div className="grid grid-cols-1 gap-6 pb-2 xl:grid-cols-[360px_minmax(0,1fr)]">
               <div className="space-y-5">
                 <div className="rounded-2xl border border-border bg-secondary/40 p-5 text-center">
                   <Avatar initials={applicant.initials} className="mx-auto h-20 w-20 text-2xl" />
@@ -100,7 +98,11 @@ function ApplicantSheet({
                 <div className="space-y-2.5 rounded-2xl border border-border p-4">
                   <DetailRow icon={IdCard} label="MSSV" value={applicant.studentId} />
                   <DetailRow icon={Briefcase} label="Ban ứng tuyển" value={applicant.department} />
-                  <DetailRow icon={Users2} label="Trạng thái" value={statusMeta[applicant.status].label} />
+                  <DetailRow
+                    icon={Users2}
+                    label="Trạng thái"
+                    value={statusMeta[applicant.status].label}
+                  />
                   {applicant.club && (
                     <DetailRow icon={Users2} label="Câu lạc bộ" value={applicant.club} />
                   )}
@@ -141,7 +143,8 @@ function ApplicantSheet({
 
                 <div>
                   <h3 className="mb-2 flex items-center gap-1.5 text-sm font-bold">
-                    <MessageSquare className="h-4 w-4 text-primary" /> Câu trả lời tuyển dụng chi tiết
+                    <MessageSquare className="h-4 w-4 text-primary" /> Câu trả lời tuyển dụng chi
+                    tiết
                   </h3>
                   {applicant.answers && applicant.answers.length > 0 ? (
                     <div className="space-y-3">
@@ -228,8 +231,8 @@ function ApplicantSheet({
             </div>
           </>
         )}
-      </SheetContent>
-    </Sheet>
+      </DialogContent>
+    </Dialog>
   );
 }
 
@@ -240,7 +243,7 @@ function RecruitmentPage() {
   const list = tab === "all" ? applicants : applicants.filter((a) => a.status === tab);
 
   // keep the open drawer in sync with live store updates
-  const selectedLive = selected ? applicants.find((a) => a.id === selected.id) ?? null : null;
+  const selectedLive = selected ? (applicants.find((a) => a.id === selected.id) ?? null) : null;
 
   const counts = {
     total: applicants.length,
@@ -258,10 +261,30 @@ function RecruitmentPage() {
 
       <div className="mb-6 grid grid-cols-2 gap-4 lg:grid-cols-4">
         {[
-          { label: "Tổng đơn", value: counts.total, icon: Users2, tone: "bg-primary/10 text-primary" },
-          { label: "Chờ duyệt", value: counts.pending, icon: Clock, tone: "bg-warning/15 text-warning-foreground" },
-          { label: "Đang phỏng vấn", value: counts.interview, icon: CalendarClock, tone: "bg-info/10 text-info" },
-          { label: "Đã nhận", value: counts.approved, icon: Check, tone: "bg-success/10 text-success" },
+          {
+            label: "Tổng đơn",
+            value: counts.total,
+            icon: Users2,
+            tone: "bg-primary/10 text-primary",
+          },
+          {
+            label: "Chờ duyệt",
+            value: counts.pending,
+            icon: Clock,
+            tone: "bg-warning/15 text-warning-foreground",
+          },
+          {
+            label: "Đang phỏng vấn",
+            value: counts.interview,
+            icon: CalendarClock,
+            tone: "bg-info/10 text-info",
+          },
+          {
+            label: "Đã nhận",
+            value: counts.approved,
+            icon: Check,
+            tone: "bg-success/10 text-success",
+          },
         ].map((s) => (
           <Card key={s.label} className="flex items-center gap-3">
             <span className={cn("grid h-11 w-11 place-items-center rounded-xl", s.tone)}>
@@ -276,19 +299,23 @@ function RecruitmentPage() {
       </div>
 
       <div className="mb-4 flex flex-wrap gap-2">
-        {([
-          ["all", "Tất cả"],
-          ["pending", "Chờ duyệt"],
-          ["interview", "Phỏng vấn"],
-          ["approved", "Đã nhận"],
-          ["rejected", "Từ chối"],
-        ] as const).map(([key, label]) => (
+        {(
+          [
+            ["all", "Tất cả"],
+            ["pending", "Chờ duyệt"],
+            ["interview", "Phỏng vấn"],
+            ["approved", "Đã nhận"],
+            ["rejected", "Từ chối"],
+          ] as const
+        ).map(([key, label]) => (
           <button
             key={key}
             onClick={() => setTab(key)}
             className={cn(
               "rounded-lg px-3 py-2 text-sm font-medium transition-colors",
-              tab === key ? "bg-primary text-primary-foreground" : "bg-card text-muted-foreground hover:bg-muted",
+              tab === key
+                ? "bg-primary text-primary-foreground"
+                : "bg-card text-muted-foreground hover:bg-muted",
             )}
           >
             {label}
@@ -316,14 +343,21 @@ function RecruitmentPage() {
               <div className="min-w-0 flex-1">
                 <div className="flex flex-wrap items-center gap-2">
                   <h3 className="font-bold">{a.name}</h3>
-                  <span className={cn("rounded-md px-2 py-0.5 text-xs font-semibold", statusMeta[a.status].chip)}>
+                  <span
+                    className={cn(
+                      "rounded-md px-2 py-0.5 text-xs font-semibold",
+                      statusMeta[a.status].chip,
+                    )}
+                  >
                     {statusMeta[a.status].label}
                   </span>
                 </div>
                 <p className="text-sm text-muted-foreground">
                   {a.studentId} • Ứng tuyển {a.department}
                 </p>
-                <p className="mt-2 rounded-lg bg-secondary p-2.5 text-sm text-foreground/80">"{a.motivation}"</p>
+                <p className="mt-2 rounded-lg bg-secondary p-2.5 text-sm text-foreground/80">
+                  "{a.motivation}"
+                </p>
               </div>
             </div>
 
